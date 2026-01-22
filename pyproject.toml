@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "basejenerator"
+version = "0.1.0"
+description = "Abstract base class and return formats for AI Generator classes within the Jeneratorverse."
+authors = ["Warren Davies"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/WarrenDavies/base-jenerator"
+repository = "https://github.com/WarrenDavies/base-jenerator"
+packages = [
+    { include = "basejenerator", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.15"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
