@@ -1,4 +1,4 @@
-from pillow import PIL
+# from PIL import Image
 from basejenerator.artifacts.base_artifact import BaseArtifact
 
 class PILArtifact(BaseArtifact):
@@ -12,12 +12,13 @@ class PILArtifact(BaseArtifact):
     """
 
     def __init__(self, data, item_extras):
+        super().__init__(data)
         self.data = data 
         self.item_extras = item_extras
-
+        self.extension = ".png"
 
     def save(self, path):
         """
         Subclasses must implement and define how artifacts are saved.
         """
-        self.data.save(path)
+        self.data.save(path + ".jpg")

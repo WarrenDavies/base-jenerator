@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Tuple
 
 from basejenerator.generator_output import GeneratorOutput
-from basejenerator.artifact import Artifact
+from basejenerator.artifacts.base_artifact import BaseArtifact
+from basejenerator.artifacts.pil_artifact import PILArtifact
 
 class BaseGenerator(ABC):
     """
@@ -41,6 +42,14 @@ class BaseGenerator(ABC):
         pass
 
 
+    @abstractmethod
+    def warmup(self):
+        """
+        Initial inference run to create cache etc., mainly for benchmarking.
+        """
+        pass
+
+
     def generate(self) -> GeneratorOutput:
         """
         The public API that runs inference.
@@ -48,16 +57,11 @@ class BaseGenerator(ABC):
         Returns:
             GeneratorOutput        
         """
-        artifacts, global_extras = self.generate_impl()
-
-        return GeneratorOutput(
-            batch=artifacts,
-            extras=global_extras
-        )
+        return self.generate_impl()
 
 
     @abstractmethod
-    def generate_impl(self) -> Tuple[List[Artifact], Dict[str, Any]]:
+    def generate_impl(self) -> Tuple[List[BaseArtifact], Dict[str, Any]]:
         """
         Abstract method containing the core generation logic.
 
@@ -70,11 +74,14 @@ class BaseGenerator(ABC):
         pass
     
 
-    def _quick_wrap(self, raw_data: list) -> List[Artifact]:
+    def _quick_wrap(self, raw_data: list, item_extras, ArtifactClass) -> List[BaseArtifact]:
         """
         Helper for subclasses to wrap artifacts into the Artfact class.
         """
-        return [Artifact(data=item, item_extras={}) for item in raw_data]
+        return [
+            ArtifactClass(data=item, item_extras=item_extras) 
+            for item, item_extras in zip(raw_data, item_extras)
+        ]
 
 
     @abstractmethod
@@ -85,3 +92,10 @@ class BaseGenerator(ABC):
         """
         pass
 
+
+    @abstractmethod
+    def get_params_schema(self):
+        """
+        Returns Pydantic class listing params that the model can accept
+        """
+        pass
