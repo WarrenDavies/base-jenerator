@@ -21,4 +21,4 @@ class PILArtifact(BaseArtifact):
         """
         Subclasses must implement and define how artifacts are saved.
         """
-        self.data.save(path + ".jpg")
+        self.data.save(path)
