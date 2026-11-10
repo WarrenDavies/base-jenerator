@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "basejenerator"
-version = "0.1.0"
+version = "0.2.0"
 description = "Abstract base class and return formats for AI Generator classes within the Jeneratorverse."
 authors = ["Warren Davies"]
 license = "MIT"
